@@ -29,7 +29,7 @@ export function LoginPage({ onGoSignup }) {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2z" />
             </svg>
           </div>
-          <h1 className="text-3xl font-bold text-white">Acme Corp</h1>
+          <h1 className="text-3xl font-bold text-white">Abhinavan</h1>
           <p className="text-blue-300 text-sm mt-1">Reimbursement Management</p>
         </div>
         <div className="bg-white rounded-2xl shadow-2xl p-8">
