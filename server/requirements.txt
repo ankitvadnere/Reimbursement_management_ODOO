@@ -1,8 +1,0 @@
-flask
-flask-cors
-psycopg2-binary
-python-dotenv
-bcrypt
-pyjwt
-pillow
-pytesseract
