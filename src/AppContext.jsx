@@ -5,12 +5,33 @@ import {
 
 const AppContext = createContext(null);
 
+function usePersistedState(key, initial) {
+  const [state, setState] = useState(() => {
+    try {
+      const stored = localStorage.getItem(key);
+      return stored ? JSON.parse(stored) : initial;
+    } catch {
+      return initial;
+    }
+  });
+
+  const setPersistedState = (value) => {
+    setState(prev => {
+      const next = typeof value === "function" ? value(prev) : value;
+      localStorage.setItem(key, JSON.stringify(next));
+      return next;
+    });
+  };
+
+  return [state, setPersistedState];
+}
+
 export function AppProvider({ children }) {
-  const [currentUser, setCurrentUser] = useState(null);
-  const [users, setUsers] = useState(INITIAL_USERS);
-  const [expenses, setExpenses] = useState(INITIAL_EXPENSES);
-  const [approvalActions, setApprovalActions] = useState(INITIAL_APPROVAL_ACTIONS);
-  const [approvalRules, setApprovalRules] = useState([]);
+  const [currentUser, setCurrentUser] = usePersistedState("app_current_user", null);
+  const [users, setUsers] = usePersistedState("app_users", INITIAL_USERS);
+  const [expenses, setExpenses] = usePersistedState("app_expenses", INITIAL_EXPENSES);
+  const [approvalActions, setApprovalActions] = usePersistedState("app_approval_actions", INITIAL_APPROVAL_ACTIONS);
+  const [approvalRules, setApprovalRules] = usePersistedState("app_approval_rules", []);
   const [toast, setToast] = useState(null);
 
   const showToast = (message, type = "success") => {
@@ -40,7 +61,7 @@ export function AppProvider({ children }) {
     const newExp = {
       ...expense, id: newId, employee_id: currentUser.id,
       amount_converted: converted,
-      status: "waiting_approval",
+      status: expense.status || "waiting_approval",
       current_approver_id: mgr ? mgr.id : null,
     };
     setExpenses(prev => [...prev, newExp]);
